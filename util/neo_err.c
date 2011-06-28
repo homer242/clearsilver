@@ -433,6 +433,10 @@ NEOERR *nerr_init (void)
     if (err != STATUS_OK) return nerr_pass(err);
     if (Inited == 0) {
 #endif
+    /* avoid a leak on Errors if nerr_init() is called twice */
+    if (Errors) {
+      uListDestroy(&Errors,ULIST_FREE);
+    }
     err = uListInit (&Errors, 10, 0);
     if (err != STATUS_OK) return nerr_pass(err);
 

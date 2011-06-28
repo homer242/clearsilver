@@ -35,7 +35,7 @@ NEOERR *ne_mkdirs (const char *path, mode_t mode)
 
   strncpy (mypath, path, sizeof(mypath));
   x = strlen(mypath);
-  if ((x < sizeof(mypath)) && (mypath[x-1] != '/'))
+  if ((x < (int) sizeof(mypath)) && (mypath[x-1] != '/'))
   {
     mypath[x] = '/';
     mypath[x+1] = '\0';

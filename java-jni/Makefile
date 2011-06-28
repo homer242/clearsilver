@@ -74,7 +74,7 @@ $(NEO_UTIL_SO): $(NEO_UTIL_JAVA_JAR) $(NEO_UTIL_OBJ) $(DEP_LIBS)
 	$(LDSHARED) -o $@ $(LDFLAGS) $(NEO_UTIL_OBJ) $(LIBS)
 
 # I guess we'll just stick the .jar file in the lib directory
-install: all
+install:
 	$(INSTALL) $(NEO_UTIL_SO) $(DESTDIR)$(libdir)
 	$(INSTALL) $(NEO_UTIL_JAVA_JAR) $(DESTDIR)$(libdir)
 

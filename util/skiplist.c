@@ -409,7 +409,7 @@ NEOERR *skipNewList(skipList *skip, int threaded, int root, int maxLevel,
     if (err != STATUS_OK) break;
 
     for(i = 0;                                       /* init header and tail */
-        i <= list->maxLevel;
+        i <= (UINT32) list->maxLevel;
         i++) {
       list->tail->next[i] = NULL;
       list->header->next[i] = list->tail;
@@ -444,7 +444,7 @@ static void skipFreeAllItems(skipList list) {
   }
                                                     /* clear header pointers */
   for(i = 0;
-      i <= list->maxLevel;
+      i <= (UINT32) list->maxLevel;
       i++)
     list->header->next[i] = list->tail;
 

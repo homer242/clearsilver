@@ -106,6 +106,10 @@ typedef char BOOL;
 #define MIN(x,y)        (((x) < (y)) ? (x) : (y))
 #endif
 
+#ifndef UNUSED
+#define UNUSED(x)        ((void)(x))
+#endif
+
 #ifndef TRUE
 #define TRUE 1
 #endif

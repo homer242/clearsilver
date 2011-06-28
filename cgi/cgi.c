@@ -201,6 +201,8 @@ struct _http_vars
   {"HTTP_IF_MODIFIED_SINCE", "IfModifiedSince"},
   {"HTTP_REFERER", "Referer"},
   {"HTTP_VIA", "Via"},
+  {"HTTP_X_REQUESTED_WITH", "XRequestedWith"},
+  {"HTTP_X_REQUESTED_HANDLER", "XRequestedHandler"},	
   /* SOAP */
   {"HTTP_SOAPACTION", "Soap.Action"},
   {NULL, NULL}
@@ -640,7 +642,7 @@ NEOERR *cgi_parse (CGI *cgi)
 
   if (!strcmp(method, "POST"))
   {
-    if (type && !strcmp(type, "application/x-www-form-urlencoded"))
+    if (type && !strncmp(type, "application/x-www-form-urlencoded", 33))
     {
       err = _parse_post_form(cgi);
       if (err != STATUS_OK) return nerr_pass (err);
@@ -698,7 +700,7 @@ NEOERR *cgi_parse (CGI *cgi)
     x = 0;
     while (x < len)
     {
-      if (len-x > sizeof(buf))
+      if (len-x > (int) sizeof(buf))
 	cgiwrap_read (buf, sizeof(buf), &r);
       else
 	cgiwrap_read (buf, len - x, &r);
@@ -1363,6 +1365,8 @@ void cgi_neo_error (CGI *cgi, NEOERR *err)
 {
   STRING str;
 
+  UNUSED(cgi);
+
   string_init(&str);
   cgiwrap_writef("Status: 500\n");
   cgiwrap_writef("Content-Type: text/html\n\n");
@@ -1376,6 +1380,8 @@ void cgi_neo_error (CGI *cgi, NEOERR *err)
 void cgi_error (CGI *cgi, const char *fmt, ...)
 {
   va_list ap;
+
+  UNUSED(cgi);
 
   cgiwrap_writef("Status: 500\n");
   cgiwrap_writef("Content-Type: text/html\n\n");
@@ -1536,6 +1542,8 @@ NEOERR *cgi_cookie_set (CGI *cgi, const char *name, const char *value,
   STRING str;
   char my_time[256];
 
+  UNUSED(cgi);
+
   if (path == NULL) path = "/";
 
   string_init(&str);
@@ -1584,6 +1592,8 @@ NEOERR *cgi_cookie_set (CGI *cgi, const char *name, const char *value,
 NEOERR *cgi_cookie_clear (CGI *cgi, const char *name, const char *domain,
                           const char *path)
 {
+  UNUSED(cgi);
+
   if (path == NULL) path = "/";
   if (domain)
   {

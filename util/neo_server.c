@@ -104,6 +104,8 @@ static int ShutdownPending = 0;
 
 static void sig_term(int sig)
 {
+  UNUSED(sig);
+
   ShutdownPending = 1;
   ne_net_shutdown();
 }

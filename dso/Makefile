@@ -21,7 +21,7 @@ $(NEO_SO): $(NEO_STATIC_LIBS) $(DEP_LIBS) Makefile
 
 #	$(LDSHARED) -o $@ $(LDFLAGS) -Wl,-whole-archive $(DLIBS)
 
-install: all
+install:
 	$(NEOTONIC_ROOT)/mkinstalldirs $(DESTDIR)$(PYTHON_SITE)
 	$(INSTALL) $(TARGETS) $(DESTDIR)$(PYTHON_SITE)
 

@@ -99,10 +99,16 @@ static NEOERR* string_check_length (STRING *str, int l)
     {
       str->max *= 2;
     } while (str->len + l >= str->max);
-    str->buf = (char *) realloc (str->buf, sizeof(char) * str->max);
-    if (str->buf == NULL)
+    /* correction d'un memory leak sur str->buf en cas d'échec du realloc */
+    char *tmp_realloc;
+    tmp_realloc = (char *) realloc (str->buf, sizeof(char) * str->max);
+    if (tmp_realloc == NULL) {
+      free(str->buf);
+      str->buf=NULL; /* puisque a=realloc(a,...) */
       return nerr_raise (NERR_NOMEM, "Unable to allocate STRING buf of size %d",
 	  str->max);
+    }
+    str->buf = tmp_realloc;
     /* ne_warn("Growing string %x to %d (%5.2fK)", str, str->max, (str->max / 1024.0)); */
   }
   return STATUS_OK;
@@ -592,11 +598,11 @@ char *repr_string_alloc (const char *s)
   return rs;
 }
 
-// List of all characters that must be escaped
-// List based on http://www.blooberry.com/indexdot/html/topics/urlencoding.htm
+/* List of all characters that must be escaped
+ * List based on http://www.blooberry.com/indexdot/html/topics/urlencoding.htm */
 static char EscapedChars[] = "$&+,/:;=?@ \"<>#%{}|\\^~[]`'";
 
-// Check if a single character needs to be escaped
+/* Check if a single character needs to be escaped */
 static BOOL is_reserved_char(char c)
 {
   int i = 0;
@@ -835,15 +841,15 @@ NEOERR *neos_url_validate (const char *in, char **esc)
   colonpos = memchr(in, ':', i);
 
   if (colonpos == NULL) {
-    // no scheme in 'in': so this is a relative url
+    /* no scheme in 'in': so this is a relative url */
     valid = 1;
   }
   else {
-    for (i = 0; i < num_protocols; i++)
+    for (i = 0; (int) i < num_protocols; i++)
     {
       if ((inlen >= strlen(URL_PROTOCOLS[i])) && 
           strncmp(in, URL_PROTOCOLS[i], strlen(URL_PROTOCOLS[i])) == 0) {
-        // 'in' starts with one of the allowed protocols
+        /* 'in' starts with one of the allowed protocols */
         valid = 1;
         break;
       }
@@ -854,7 +860,7 @@ NEOERR *neos_url_validate (const char *in, char **esc)
   if (valid)
     return neos_html_escape(in, inlen, esc);
 
-  // 'in' contains an unsupported scheme, replace with '#' 
+  /* 'in' contains an unsupported scheme, replace with '#' */
   string_init(&out_s);
   err = string_append (&out_s, "#");
   if (err) return nerr_pass (err);

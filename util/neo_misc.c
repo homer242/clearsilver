@@ -34,7 +34,7 @@ void ne_vwarn (const char *fmt, va_list ap)
 
   localtime_r(&now, &my_tm);
 
-  strftime(tbuf, sizeof(tbuf), "%m/%d %T", &my_tm);
+  strftime(tbuf, sizeof(tbuf), "%m/%d %H:%M:%S", &my_tm);
 
   vsnprintf (buf, sizeof(buf), fmt, ap);
   len = strlen(buf);

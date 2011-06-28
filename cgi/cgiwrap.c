@@ -14,6 +14,9 @@
 #if HAVE_FEATURES_H
 #include <features.h>
 #endif
+#ifdef __UCLIBC__
+#include <unistd.h>
+#endif
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -171,10 +174,13 @@ NEOERR *cgiwrap_iterenv (int num, char **k, char **v)
 NEOERR *cgiwrap_writef (const char *fmt, ...)
 {
   va_list ap;
+  NEOERR * ret;
 
   va_start (ap, fmt);
-  cgiwrap_writevf (fmt, ap);
+  ret = cgiwrap_writevf (fmt, ap);
   va_end (ap);
+  if (ret && ret != STATUS_OK)
+    nerr_ignore (ret);
   return STATUS_OK;
 }
 

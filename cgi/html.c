@@ -774,7 +774,7 @@ NEOERR *html_strip_alloc(const char *src, int slen,
 	}
 	else
 	{
-	  if (ampl < sizeof(amp)-1)
+	  if (ampl < (int) sizeof(amp)-1)
 	    amp[ampl++] = tolower(src[x]);
 	  else
 	  {

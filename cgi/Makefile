@@ -38,7 +38,7 @@ $(STATIC_CSO): $(STATIC_OBJ) $(DEP_LIBS)
 $(CGICSTEST_EXE): $(CGICSTEST_OBJ) $(DEP_LIBS)
 	$(LD) $@ $(CGICSTEST_OBJ) $(LDFLAGS) $(DLIBS) $(LIBS)
 
-install: all
+install:
 	$(NEOTONIC_ROOT)/mkinstalldirs $(DESTDIR)$(cs_includedir)/cgi
 	$(INSTALL) -m 644 cgi.h $(DESTDIR)$(cs_includedir)/cgi
 	$(INSTALL) -m 644 cgiwrap.h $(DESTDIR)$(cs_includedir)/cgi

@@ -54,7 +54,7 @@ static UINT32 hash_hdf_hash(const void *a)
 }
 
 static NEOERR *_alloc_hdf (HDF **hdf, const char *name, size_t nlen, 
-                           const char *value, int dup, int wf, HDF *top)
+                           const char *value, int dupl, int wf, HDF *top)
 {
   *hdf = calloc (1, sizeof (HDF));
   if (*hdf == NULL)
@@ -80,7 +80,7 @@ static NEOERR *_alloc_hdf (HDF **hdf, const char *name, size_t nlen,
   }
   if (value != NULL)
   {
-    if (dup)
+    if (dupl)
     {
       (*hdf)->alloc_value = 1;
       (*hdf)->value = strdup(value);
@@ -233,7 +233,7 @@ static int _walk_hdf (HDF *hdf, const char *name, HDF **node)
 
   n = name;
   s = strchr (n, '.');
-  x = (s == NULL) ? strlen(n) : s - n;
+  x = (s == NULL) ? (int) strlen(n) : s - n;
 
   while (1)
   {
@@ -279,7 +279,7 @@ static int _walk_hdf (HDF *hdf, const char *name, HDF **node)
     }
     n = s + 1;
     s = strchr (n, '.');
-    x = (s == NULL) ? strlen(n) : s - n;
+    x = (s == NULL) ? (int) strlen(n) : s - n;
   } 
   if (hp->link)
   {
@@ -570,7 +570,7 @@ NEOERR* _hdf_hash_level(HDF *hdf)
 }
 
 static NEOERR* _set_value (HDF *hdf, const char *name, const char *value, 
-                           int dup, int wf, int link, HDF_ATTR *attr, 
+                           int dupl, int wf, int lnk, HDF_ATTR *attr, 
                            HDF **set_node)
 {
   NEOERR *err;
@@ -615,7 +615,7 @@ static NEOERR* _set_value (HDF *hdf, const char *name, const char *value,
       hdf->alloc_value = 0;
       hdf->value = NULL;
     }
-    else if (dup)
+    else if (dupl)
     {
       hdf->alloc_value = 1;
       hdf->value = strdup(value);
@@ -650,7 +650,7 @@ static NEOERR* _set_value (HDF *hdf, const char *name, const char *value,
     strcpy(new_name, hdf->value);
     strcat(new_name, ".");
     strcat(new_name, name);
-    err = _set_value (hdf->top, new_name, value, dup, wf, link, attr, set_node);
+    err = _set_value (hdf->top, new_name, value, dupl, wf, lnk, attr, set_node);
     free(new_name);
     return nerr_pass(err);
   }
@@ -719,8 +719,8 @@ skip_search:
       }
       else
       {
-	err = _alloc_hdf (&hp, n, x, value, dup, wf, hdf->top);
-	if (link) hp->link = 1;
+	err = _alloc_hdf (&hp, n, x, value, dupl, wf, hdf->top);
+	if (lnk) hp->link = 1;
 	else hp->link = 0;
 	hp->attr = attr;
       }
@@ -770,7 +770,7 @@ skip_search:
 	  hp->alloc_value = 0;
 	  hp->value = NULL;
 	}
-	else if (dup)
+	else if (dupl)
 	{
 	  hp->alloc_value = 1;
 	  hp->value = strdup(value);
@@ -784,7 +784,7 @@ skip_search:
 	  hp->value = (char *)value;
 	}
       }
-      if (link) hp->link = 1;
+      if (lnk) hp->link = 1;
       else hp->link = 0;
     }
     else if (hp->link) 
@@ -796,7 +796,7 @@ skip_search:
       }
       strcpy(new_name, hp->value);
       strcat(new_name, s);
-      err = _set_value (hdf->top, new_name, value, dup, wf, link, attr, set_node);
+      err = _set_value (hdf->top, new_name, value, dupl, wf, lnk, attr, set_node);
       free(new_name);
       return nerr_pass(err);
     }
@@ -1267,6 +1267,8 @@ NEOERR* hdf_dump(HDF *hdf, const char *prefix)
 
 NEOERR* hdf_dump_format (HDF *hdf, int lvl, FILE *fp)
 {
+  UNUSED(lvl);
+
   return nerr_pass(hdf_dump_cb(hdf, "", DUMP_TYPE_PRETTY, 0, fp, _fp_dump_cb));
 }
 
@@ -1357,7 +1359,7 @@ static int _copy_line (const char **s, char *buf, size_t buf_len)
   int x = 0;
   const char *st = *s;
 
-  while (*st && x < buf_len-1)
+  while (*st && x < (int) buf_len-1)
   {
     buf[x++] = *st;
     if (*st++ == '\n') break;
@@ -1398,17 +1400,17 @@ static NEOERR *_copy_line_advance(const char **s, STRING *line)
 
 char *_strndup(const char *s, int len) {
   int x;
-  char *dup; 
+  char *t;
   if (s == NULL) return NULL;
-  dup = (char *) malloc(len+1);
-  if (dup == NULL) return NULL;
+  t = (char *) malloc(len+1);
+  if (t == NULL) return NULL;
   for (x = 0; x < len && s[x]; x++)
   {
-    dup[x] = s[x];
+    t[x] = s[x];
   }
-  dup[x] = '\0';
-  dup[len] = '\0';
-  return dup;
+  t[x] = '\0';
+  t[len] = '\0';
+  return t;
 }
 
 /* attributes are of the form [key1, key2, key3=value, key4="repr"] */

@@ -19,7 +19,7 @@ all: $(TARGETS)
 $(MOD_ECS_SO): $(MOD_ECS_SRC) $(DEP_LIBS)
 	$(APXS) -c -o $@ $(MOD_ECS_SRC)
 
-install: all
+install:
 	$(NEOTONIC_ROOT)/mkinstalldirs $(DESTDIR)$(libexecdir)
 	$(INSTALL) $(MOD_ECS_SO) $(DESTDIR)$(libexecdir)
 

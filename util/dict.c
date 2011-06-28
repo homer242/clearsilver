@@ -87,6 +87,8 @@ static NEOERR *dictNewItem(dictCtx dict, dictEntryPtr entry,
 {
   dictItemPtr my_item;
 
+  UNUSED(dict);
+
   if (item != NULL)
     *item = NULL;
 

@@ -489,7 +489,7 @@ static NEOERR *_ne_net_read_int(NSOCK *sock, int *i, char end)
   char buf[32];
   char *ep = NULL;
 
-  while (x < sizeof(buf))
+  while (x < (int) sizeof(buf))
   {
     while (sock->il - sock->ib > 0)
     {

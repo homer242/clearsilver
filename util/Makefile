@@ -21,7 +21,7 @@ $(UTL_LIB): $(UTL_OBJ)
 	$(AR) $@ $(UTL_OBJ)
 	$(RANLIB) $@
 
-install: all
+install:
 	$(NEOTONIC_ROOT)/mkinstalldirs $(DESTDIR)$(cs_includedir)/util
 	$(INSTALL) -m 644 $(UTL_HDR) $(DESTDIR)$(cs_includedir)/util
 	$(INSTALL) -m 644 $(UTL_LIB) $(DESTDIR)$(libdir)

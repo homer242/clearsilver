@@ -40,7 +40,7 @@ testrb: ext/hdf/hdf.so
 	@echo  "Passed ruby test"
 
 
-install: all
+install:
 	$(RUBY) install.rb install
 
 clean:

@@ -35,7 +35,7 @@ cs: output_dir
 	  fi; \
 	done
 
-install: all
+install:
 	./mkinstalldirs $(DESTDIR)$(cs_includedir)
 	./mkinstalldirs $(DESTDIR)$(bindir)
 	./mkinstalldirs $(DESTDIR)$(libdir)

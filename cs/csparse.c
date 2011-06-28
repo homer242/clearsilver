@@ -59,7 +59,7 @@ typedef enum
   ST_DEF = 1<<6,
   ST_LOOP =  1<<7,
   ST_ALT = 1<<8,
-  ST_ESCAPE = 1<<9,
+  ST_ESCAPE = 1<<9
 } CS_STATE;
 
 #define ST_ANYWHERE (ST_EACH | ST_WITH | ST_ELSE | ST_IF | ST_GLOBAL | ST_DEF | ST_LOOP | ST_ALT | ST_ESCAPE)
@@ -178,7 +178,8 @@ CS_CMDS Commands[] = {
     escape_parse, escape_eval, 1},
   {"/escape",    sizeof("/escape")-1,    ST_ESCAPE,     ST_POP,
     end_parse, skip_eval, 1},
-  {NULL},
+  {NULL,    0,    0,    0,
+  	NULL, NULL, 0}
 };
 
 /* Possible Config.VarEscapeMode values */
@@ -193,7 +194,7 @@ CS_ESCAPE_MODES EscapeModes[] = {
   {"html", NEOS_ESCAPE_HTML},
   {"js",   NEOS_ESCAPE_SCRIPT},
   {"url",  NEOS_ESCAPE_URL},
-  {NULL},
+  {NULL,   0}
 };
 
 
@@ -1154,7 +1155,7 @@ static char *token_list (CSTOKEN *tokens, int ntokens, char *buf, size_t buflen)
     {
       t = snprintf(p, buflen, "%s%d:%s", i ? "  ":"", i, expand_token_type(tokens[i].type, 0));
     }
-    if (t == -1 || t >= buflen) return buf;
+    if (t == -1 || t >= (int) buflen) return buf;
     buflen -= t;
     p += t;
   }
@@ -2567,6 +2568,9 @@ static NEOERR *else_parse (CSPARSE *parse, int cmd, char *arg)
   NEOERR *err;
   STACK_ENTRY *entry;
 
+  UNUSED(cmd);
+  UNUSED(arg);
+
   /* ne_warn ("else"); */
   err = uListGet (parse->stack, -1, (void *)&entry);
   if (err != STATUS_OK) return nerr_pass(err);
@@ -2599,6 +2603,9 @@ static NEOERR *endif_parse (CSPARSE *parse, int cmd, char *arg)
 {
   NEOERR *err;
   STACK_ENTRY *entry;
+
+  UNUSED(cmd);
+  UNUSED(arg);
 
   /* ne_warn ("endif"); */
   err = uListGet (parse->stack, -1, (void *)&entry);
@@ -2781,6 +2788,9 @@ static NEOERR *end_parse (CSPARSE *parse, int cmd, char *arg)
   NEOERR *err;
   STACK_ENTRY *entry;
 
+  UNUSED(cmd);
+  UNUSED(arg);
+
   err = uListGet (parse->stack, -1, (void *)&entry);
   if (err != STATUS_OK) return nerr_pass(err);
 
@@ -2795,6 +2805,8 @@ static NEOERR *include_parse (CSPARSE *parse, int cmd, char *arg)
   char *s;
   int flags = 0;
   CSARG arg1, val;
+
+  UNUSED(cmd);
 
   memset(&arg1, 0, sizeof(CSARG));
   if (arg[0] == '!')
@@ -3511,6 +3523,8 @@ static NEOERR *loop_eval (CSPARSE *parse, CSTREE *node, CSTREE **next)
 
 static NEOERR *skip_eval (CSPARSE *parse, CSTREE *node, CSTREE **next)
 {
+  UNUSED(parse);
+
   *next = node->next;
   return STATUS_OK;
 }
@@ -3651,6 +3665,8 @@ static NEOERR * _builtin_subcount(CSPARSE *parse, CS_FUNCTION *csf, CSARG *args,
   int count = 0;
   CSARG val;
 
+  UNUSED(csf);
+
   memset(&val, 0, sizeof(val));
   err = eval_expr(parse, args, &val);
   if (err) return nerr_pass(err);
@@ -3683,6 +3699,8 @@ static NEOERR * _builtin_str_length(CSPARSE *parse, CS_FUNCTION *csf, CSARG *arg
   NEOERR *err;
   CSARG val;
 
+  UNUSED(csf);
+
   memset(&val, 0, sizeof(val));
   err = eval_expr(parse, args, &val);
   if (err) return nerr_pass(err);
@@ -3705,6 +3723,8 @@ static NEOERR * _builtin_str_crc(CSPARSE *parse, CS_FUNCTION *csf, CSARG *args,
 {
   NEOERR *err;
   CSARG val;
+
+  UNUSED(csf);
 
   memset(&val, 0, sizeof(val));
   err = eval_expr(parse, args, &val);
@@ -3730,6 +3750,8 @@ static NEOERR * _builtin_str_find(CSPARSE *parse, CS_FUNCTION *csf, CSARG *args,
   char *s = NULL;
   char *substr = NULL;
   char *pstr = NULL;
+
+  UNUSED(csf);
 
   result->op_type = CS_TYPE_NUM;
   result->n = -1;
@@ -3757,6 +3779,8 @@ static NEOERR * _builtin_name(CSPARSE *parse, CS_FUNCTION *csf, CSARG *args, CSA
   NEOERR *err;
   HDF *obj;
   CSARG val;
+
+  UNUSED(csf);
 
   memset(&val, 0, sizeof(val));
   err = eval_expr(parse, args, &val);
@@ -3790,6 +3814,8 @@ static NEOERR * _builtin_first(CSPARSE *parse, CS_FUNCTION *csf, CSARG *args,
   char *c;
   CSARG val;
 
+  UNUSED(csf);
+
   memset(&val, 0, sizeof(val));
   err = eval_expr(parse, args, &val);
   if (err) return nerr_pass(err);
@@ -3818,6 +3844,8 @@ static NEOERR * _builtin_last(CSPARSE *parse, CS_FUNCTION *csf, CSARG *args,
   CS_LOCAL_MAP *map;
   char *c;
   CSARG val;
+
+  UNUSED(csf);
 
   memset(&val, 0, sizeof(val));
   err = eval_expr(parse, args, &val);
@@ -3853,6 +3881,8 @@ static NEOERR * _builtin_abs (CSPARSE *parse, CS_FUNCTION *csf, CSARG *args,
   int n1 = 0;
   CSARG val;
 
+  UNUSED(csf);
+
   memset(&val, 0, sizeof(val));
   err = eval_expr(parse, args, &val);
   if (err) return nerr_pass(err);
@@ -3873,6 +3903,8 @@ static NEOERR * _builtin_max (CSPARSE *parse, CS_FUNCTION *csf, CSARG *args,
   long int n1 = 0;
   long int n2 = 0;
 
+  UNUSED(csf);
+
   result->op_type = CS_TYPE_NUM;
   result->n = 0;
 
@@ -3890,6 +3922,8 @@ static NEOERR * _builtin_min (CSPARSE *parse, CS_FUNCTION *csf, CSARG *args,
   NEOERR *err;
   long int n1 = 0;
   long int n2 = 0;
+
+  UNUSED(csf);
 
   result->op_type = CS_TYPE_NUM;
   result->n = 0;
@@ -3910,6 +3944,8 @@ static NEOERR * _builtin_str_slice (CSPARSE *parse, CS_FUNCTION *csf, CSARG *arg
   long int e = 0;
   size_t len;
 
+  UNUSED(csf);
+
   result->op_type = CS_TYPE_STRING;
   result->s = "";
 
@@ -3921,9 +3957,9 @@ static NEOERR * _builtin_str_slice (CSPARSE *parse, CS_FUNCTION *csf, CSARG *arg
   if (b < 0 && e == 0) e = len;
   if (b < 0) b += len;
   if (e < 0) e += len;
-  if (e > len) e = len;
+  if (e > (int) len) e = len;
   /* Its the whole string */
-  if (b == 0 && e == len)
+  if (b == 0 && e == (int) len)
   {
     result->s = s;
     result->alloc = 1;
@@ -4179,10 +4215,10 @@ static NEOERR *cs_init_internal (CSPARSE **parse, HDF *hdf, CSPARSE *parent)
     my_parse->global_hdf = parent->global_hdf;
     my_parse->fileload = parent->fileload;
     my_parse->fileload_ctx = parent->fileload_ctx;
-    // This should be safe since locals handling is done entirely local to the
-    // eval functions, not globally by the parse handling.  This should
-    // pass the locals down to the new parse context to make locals work with
-    // lvar
+    /* This should be safe since locals handling is done entirely local to the
+     * eval functions, not globally by the parse handling.  This should
+     * pass the locals down to the new parse context to make locals work with
+     * lvar */
     my_parse->locals = parent->locals;
     my_parse->parent = parent;
 
