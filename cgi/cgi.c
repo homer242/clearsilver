@@ -18,7 +18,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
-#if defined(HTML_COMPRESSION)
+#if (CS_ENABLE_HTML_COMPRESSION)
 #include <zlib.h>
 #endif
 
@@ -479,7 +479,7 @@ static NEOERR *_parse_cookie (CGI *cgi)
   return nerr_pass(err);
 }
 
-#ifdef ENABLE_REMOTE_DEBUG
+#if (CS_ENABLE_REMOTE_DEBUG)
 
 static void _launch_debugger (CGI *cgi, char *display)
 {
@@ -565,7 +565,7 @@ static NEOERR *cgi_pre_parse (CGI *cgi)
     }
   }
 
-#ifdef ENABLE_REMOTE_DEBUG
+#if (CS_ENABLE_REMOTE_DEBUG)
   {
     char *display;
 
@@ -877,7 +877,7 @@ static NEOERR *cgi_headers (CGI *cgi)
   return STATUS_OK;
 }
 
-#if defined(HTML_COMPRESSION)
+#if (CS_ENABLE_HTML_COMPRESSION)
 /* Copy these here from zutil.h, which we aren't supposed to include */
 #define DEF_MEM_LEVEL 8
 #define OS_CODE 0x03
@@ -1079,7 +1079,7 @@ NEOERR *cgi_output (CGI *cgi, STRING *str)
   if (!strcasecmp(s, "text/html"))
     is_html = 1;
 
-#if defined(HTML_COMPRESSION)
+#if (CS_ENABLE_HTML_COMPRESSION)
   /* Determine whether or not we can compress the output */
   if (is_html && hdf_get_int_value (cgi->hdf, "Config.CompressionEnabled", 0))
   {
@@ -1188,7 +1188,7 @@ NEOERR *cgi_output (CGI *cgi, STRING *str)
     }
   }
 
-#if defined(HTML_COMPRESSION)
+#if (CS_ENABLE_HTML_COMPRESSION)
     if (is_html && (use_deflate || use_gzip))
     {
       char *dest;

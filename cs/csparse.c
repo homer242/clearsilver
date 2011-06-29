@@ -32,7 +32,7 @@
 #include <limits.h>
 #include <stdarg.h>
 
-#ifdef ENABLE_GETTEXT
+#if (CS_ENABLE_GETTEXT)
 #include <libintl.h>
 #endif
 
@@ -3985,7 +3985,7 @@ static NEOERR * _builtin_str_slice (CSPARSE *parse, CS_FUNCTION *csf, CSARG *arg
   return STATUS_OK;
 }
 
-#ifdef ENABLE_GETTEXT
+#if (ENABLE_GETTEXT)
 static NEOERR * _builtin_gettext(CSPARSE *parse, CS_FUNCTION *csf, CSARG *args, CSARG *result)
 {
   NEOERR *err;
@@ -4182,7 +4182,7 @@ static NEOERR *cs_init_internal (CSPARSE **parse, HDF *hdf, CSPARSE *parent)
       { "string.slice", 3, _builtin_str_slice },
       { "string.length", 1, _builtin_str_length },
       { "string.crc", 1, _builtin_str_crc},
-#ifdef ENABLE_GETTEXT
+#if (ENABLE_GETTEXT)
       { "_", 1, _builtin_gettext },
 #endif
       { NULL, 0, NULL },

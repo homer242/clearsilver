@@ -84,7 +84,7 @@ PERL	   = @PERL@
 RUBY       = @RUBY@
 
 CPPFLAGS   = -I$(NEOTONIC_ROOT) @CPPFLAGS@
-CFLAGS     = @CFLAGS@ -Wall $(CPPFLAGS) $(PICFLG)
+CFLAGS     = @DEFS@ @CFLAGS@ -Wall $(CPPFLAGS) $(PICFLG)
 OUTPUT_OPTION = -o $@
 LD         = $(CC) -o
 LDFLAGS    = -L$(LIB_DIR) @LDFLAGS@
