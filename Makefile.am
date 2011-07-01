@@ -1,6 +1,9 @@
 SUBDIRS = cgi cs util
 
-pkginclude_HEADERS = 
+ACLOCAL_AMFLAGS = "-I m4"
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = clearsilver.pc
 
 dist_man_MANS = man/man3/cBroadcast.3 \
 	man/man3/cCreate.3 \
