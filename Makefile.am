@@ -1,6 +1,6 @@
 SUBDIRS = cgi cs util
 
-ACLOCAL_AMFLAGS = "-I m4"
+ACLOCAL_AMFLAGS = -I m4 --install
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = clearsilver.pc
