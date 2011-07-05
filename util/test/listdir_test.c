@@ -1,5 +1,3 @@
-
-#include "cs_config.h"
 #include <stdio.h>
 #include "util/neo_misc.h"
 #include "util/neo_err.h"

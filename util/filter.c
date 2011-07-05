@@ -6,8 +6,6 @@
  * of just one (which is what popen is).
  */
 
-#include "cs_config.h"
-
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>

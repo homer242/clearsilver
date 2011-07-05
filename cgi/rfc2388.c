@@ -13,8 +13,6 @@
  * HTTP file upload
  */
 
-#include "cs_config.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

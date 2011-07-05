@@ -23,8 +23,6 @@
  * think I need to worry about 3 & 5 either, but maybe in the future.
  */
 
-#include "cs_config.h"
-
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>

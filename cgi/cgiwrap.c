@@ -9,7 +9,7 @@
  *
  */
 
-#include "cs_config.h"
+#include "config.h"
 
 #if HAVE_FEATURES_H
 #include <features.h>

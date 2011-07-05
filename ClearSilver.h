@@ -49,20 +49,8 @@
 #include "util/wildmat.h"
 #include "util/filter.h"
 
-#ifdef HAVE_LOCKF
-# include "util/ulocks.h"
-# include "util/rcfs.h"
-
-/* These are dependent on the pthread locking code in ulocks */
-# ifdef HAVE_PTHREADS
-#  include "util/skiplist.h"
-#  include "util/dict.h"
-# endif
-#endif
-
-/* This is dependent on Berkeley DB v2 */
-#ifdef HAVE_DB2
-# include "util/wdb.h"
+#if (CS_ENABLE_WDB)
+#include "util/wdb.h"
 #endif
 
 /* The ClearSilver Template language */

@@ -13,8 +13,6 @@
  * revision-controlled file system (RCFS) with meta-info storage
  */
 
-#include "cs_config.h"
-
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>

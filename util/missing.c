@@ -11,7 +11,7 @@
  * is free (hmm, FreeBSD libc?)
  */
 
-#include "cs_config.h"
+#include "config.h"
 
 #ifndef HAVE_STRTOK_R
 #include <string.h>

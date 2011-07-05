@@ -14,8 +14,6 @@
  *
  */
 
-#include "cs_config.h"
-
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>

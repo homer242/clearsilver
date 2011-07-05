@@ -1,5 +1,3 @@
-
-#include "cs_config.h"
 #include <unistd.h>
 #include "util/neo_misc.h"
 #include "util/neo_hdf.h"

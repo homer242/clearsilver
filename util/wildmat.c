@@ -36,8 +36,6 @@
  ** out on.
  */
 
-#include "cs_config.h"
-
 #include <ctype.h>
 #include "neo_misc.h"
 

@@ -9,8 +9,6 @@
  *
  */
 
-#include "cs_config.h"
-
 #include <unistd.h>
 #include <ctype.h>
 #include <stdlib.h>

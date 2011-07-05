@@ -1,6 +1,3 @@
-
-#include "cs_config.h"
-
 #include <stdio.h>
 #include <string.h>
 
