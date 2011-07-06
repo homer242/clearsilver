@@ -1,4 +1,4 @@
-SUBDIRS = cgi cs util
+SUBDIRS = util cgi cs
 
 ACLOCAL_AMFLAGS = -I m4 --install
 

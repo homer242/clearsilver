@@ -47,14 +47,16 @@ AC_CHECK_FUNCS(gettimeofday mktime putenv strerror strspn strtod strtol strtoul)
 AC_CHECK_FUNCS(random rand drand48)
 
 dnl Check for locks and pthread
+cs_cv_have_lockf=no
 AC_CHECK_FUNC(lockf, [
-  AC_SUBST(cs_cv_have_lockf, yes)
+  cs_cv_have_lockf=yes
   AC_DEFINE(HAVE_LOCKF, 1, [Define to 1 if system have lockf function])
+])
 
-  AC_CHECK_HEADER(pthread.h, [
-    AC_SUBST(cs_cv_have_pthread, yes)
+cs_cv_have_pthread=no
+AC_CHECK_HEADER(pthread.h, [
+    cs_cv_have_pthread=yes
     AC_DEFINE(HAVE_PTHREADS, 1, [Define to 1 if system have pthreads])
-  ])
 ])
 
 dnl Mingw32 ?
@@ -64,13 +66,15 @@ if test "x$MINGW32" = "xyes"; then
 fi
 
 dnl Check for snprintf and vsnprintf
+cs_cv_have_snprintf=no
 AC_CHECK_FUNC(snprintf, [
-  AC_SUBST(cs_cv_have_snprintf, yes)
+  cs_cv_have_snprintf=yes
   AC_DEFINE(HAVE_SNPRINTF, 1, [Define to 1 if system have snprintf function])
 ])
 
+cs_cv_have_vsnprintf=no
 AC_CHECK_FUNC(vsnprintf, [
-  AC_SUBST(cs_cv_have_vsnprintf, yes)
+  cs_cv_have_vsnprintf=yes
   AC_DEFINE(HAVE_VSNPRINTF, 1, [Define to 1 if system have vsnprintf function])
 ])
 
@@ -78,11 +82,12 @@ dnl Check for missing re-entrant functions
 cs_cv_missing=no
 cs_cv_need_reentrant=no
 
+cs_cv_have_localtime_r=no
 AC_CHECK_FUNCS(localtime_r, [
   AC_MSG_CHECKING(whether localtime_r is declared)
   AC_EGREP_CPP(localtime_r,[
 #include <time.h>],[
-    AC_SUBST(cs_cv_have_localtime_r, yes)
+    cs_cv_have_localtime_r=yes
     AC_DEFINE(HAVE_LOCALTIME_R, 1, [Define to 1 if system have localtime_r function])
     AC_MSG_RESULT(yes)],[
     AC_MSG_RESULT(no)
@@ -95,11 +100,12 @@ AC_CHECK_FUNCS(localtime_r, [
       cs_cv_missing=yes
       AC_MSG_RESULT(no)])])], [cs_cv_missing=yes])
 
+cs_cv_have_gmtime_r=no
 AC_CHECK_FUNCS(gmtime_r, [
   AC_MSG_CHECKING(whether gmtime_r is declared)
   AC_EGREP_CPP(gmtime_r,[
 #include <time.h>],[
-    AC_SUBST(cs_cv_have_gmtime_r, yes)
+    cs_cv_have_gmtime_r=yes
     AC_DEFINE(HAVE_GMTIME_R, 1, [Define to 1 if system have gmtime_r function])
     AC_MSG_RESULT(yes)],[
     AC_MSG_RESULT(no)
@@ -112,11 +118,12 @@ AC_CHECK_FUNCS(gmtime_r, [
       cs_cv_missing=yes
       AC_MSG_RESULT(no)])])], [cs_cv_missing=yes])
 
+cs_cv_have_strtok_r=no
 AC_CHECK_FUNCS(strtok_r, [
   AC_MSG_CHECKING(whether strtok_r is declared)
   AC_EGREP_CPP(strtok_r,[
 #include <string.h>],[
-    AC_SUBST(cs_cv_have_strtok_r, yes)
+    cs_cv_have_strtok_r=yes
     AC_DEFINE(HAVE_STRTOK_R, 1, [Define to 1 if system have strtok_r function])
     AC_MSG_RESULT(yes)],[
     AC_MSG_RESULT(no)
@@ -129,18 +136,18 @@ AC_CHECK_FUNCS(strtok_r, [
       cs_cv_missing=yes
       AC_MSG_RESULT(no)])])], [cs_cv_missing=yes])
 
+cs_cv_have_mkstemp=no
 AC_CHECK_FUNC(mkstemp, [
-  AC_SUBST(cs_cv_have_mkstemp, yes)
+  cs_cv_have_mkstemp=yes
   AC_DEFINE(HAVE_MKSTEMP, 1, [Define to 1 if system have mkstemp function])
 ], [cs_cv_missing=yes])
 
+cs_cv_have_regexec=no
 AC_CHECK_FUNC(regexec, [
-  AC_SUBST(cs_cv_have_regex, yes)
+  cs_cv_have_regexec=yes
   AC_DEFINE(HAVE_REGEX, 1, [Define to 1 if system have regexec function])
   CPPFLAGS="$CPPFLAGS -I\$(NEOTONIC_ROOT)/util/regex"
 ])
-
-AC_SUBST(cs_cv_missing)
 
 if test "x$cs_cv_need_reentrant" = "xyes"; then
   CPPFLAGS="$CPPFLAGS -D_REENTRANT"
@@ -152,6 +159,7 @@ AC_ARG_ENABLE(wdb, [  --enable-wdb   Enables building of wdb])
 if test "$enable_wdb" = "yes"; then
   AC_SEARCH_LIBS([db_open], [db db2], [], [AC_MSG_ERROR([No found db_open() in lib db])])
   AC_MSG_RESULT(Enabling WDB support)
+  AC_DEFINE(ENABLE_WDB, 1, [Define to 1 to enable wdb support])
 fi
 
 dnl html compression option
@@ -160,6 +168,7 @@ AC_ARG_ENABLE(compression, [  --enable-compression   Enables HTML Compression su
 if test "$enable_compression" = "yes"; then
   AC_SEARCH_LIBS([deflate], [z], [], [AC_MSG_ERROR([Unable to find deflate() in lib z])])
   AC_MSG_RESULT(Enabling HTML Compression support)
+  AC_DEFINE(ENABLE_COMPRESSION, 1, [Define to 1 to enable html compression])
   LIBS="$LIBS -lz"
 fi
 
@@ -168,6 +177,7 @@ AC_ARG_ENABLE(remote-debugger, [  --enable-remote-debugger   Enables remote X CG
 
 if test "$enable_remote_debugger" = "yes"; then
   AC_MSG_RESULT(Enabling CGI X Remote debugger)
+  AC_DEFINE(ENABLE_REMOTE_DEBUGGER, 1, [Define to 1 to enable remote debug])
 fi
 
 dnl gettext option
@@ -178,6 +188,7 @@ if test "$enable_gettext" = "yes"; then
   AC_CHECK_HEADER(libintl.h, [], [AC_MSG_ERROR([No found libintl.h])])
 
   AC_MSG_RESULT(Enabling gettext message translation)
+  AC_DEFINE(ENABLE_GETTEXT, 1, [Define to 1 to enable gettext support])
 fi
 
 dnl apache options
@@ -472,8 +483,16 @@ AC_SUBST(PYTHON_LIB)
 AC_SUBST(PYTHON_SITE)
 AC_SUBST(CSHARP_PATH)
 
+AM_CONDITIONAL(ON_MINGW32, [test "x$MINGW32" = "xyes"])
+AM_CONDITIONAL(USE_WDB, [test "x$enable_wdb" = "xyes"])
+AM_CONDITIONAL(USE_LOCKF, [test "x$cs_cv_have_lockf" = "xyes"])
+AM_CONDITIONAL(USE_PTHREAD, [test "x$cs_cv_have_pthread" = "xyes" -a "x$cs_cv_have_lockf" = "xyes"])
+AM_CONDITIONAL(USE_BUILTIN_SNPRINTF, [test "x$cs_cv_have_snprintf" = "xno"])
+AM_CONDITIONAL(USE_BUILTIN_REGEXEC, [test "x$cs_cv_have_regexec" = "xno"])
+AM_CONDITIONAL(USE_BUILTIN_MISSING_FUNC, [test "x$cs_cv_missing" = "xyes"])
+
 # the generated files
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([clearsilver.pc cs_config.h Makefile cs/Makefile cgi/Makefile util/Makefile])
+AC_CONFIG_FILES([clearsilver.pc Makefile cs/Makefile cgi/Makefile util/Makefile])
 
 AC_OUTPUT
