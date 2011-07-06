@@ -21,7 +21,8 @@
 #include "neo_misc.h"
 #include "neo_err.h"
 #include "skiplist.h"
-#include "ulocks.h"
+
+#include "plocks.h"
 
 typedef struct skipItem *skipItem;
 

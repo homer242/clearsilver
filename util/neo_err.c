@@ -22,6 +22,10 @@
 #include "ulist.h"
 #include "ulocks.h"
 
+#ifdef HAVE_PTHREADS
+#include "plocks.h"
+#endif
+
 int NERR_PASS = -1;
 int NERR_ASSERT = 0;
 int NERR_NOT_FOUND = 0;
@@ -38,6 +42,7 @@ int NERR_EXISTS = 0;
 static NEOERR *FreeList = NULL;
 static ULIST *Errors = NULL;
 static int Inited = 0;
+
 #ifdef HAVE_PTHREADS
 /* In multi-threaded environments, we have to init thread safely */
 static pthread_mutex_t InitLock = PTHREAD_MUTEX_INITIALIZER;

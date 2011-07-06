@@ -1,47 +1,46 @@
 lib_LTLIBRARIES = libneo_utl.la
 NEO_UTL_LIBRARY_VERSION=1:0:0
 
-includedir=$(includedir)/ClearSilver/util
-include_HEADERS = neo_err.h neo_files.h neo_misc.h neo_rand.h \
+library_includedir=$(includedir)/ClearSilver/util
+library_include_HEADERS = neo_err.h neo_files.h neo_misc.h neo_rand.h \
 	ulist.h neo_hdf.h neo_str.h neo_date.h wildmat.h neo_hash.h
 
-libneo_utl_la_LDFLAGS = -version-info $(NEO_UTL_LIBRARY_VERSION)
 libneo_utl_la_SOURCES = neo_err.c neo_files.c neo_misc.c neo_rand.c \
 	ulist.c neo_hdf.c neo_str.c neo_date.c wildmat.c neo_hash.c
+libneo_utl_la_LDFLAGS = -version-info $(NEO_UTL_LIBRARY_VERSION)
 
 if USE_WDB
 libneo_utl_la_SOURCES += wdb.c
-include_HEADERS += wdb.h
+library_include_HEADERS += wdb.h
 endif
 
 if USE_LOCKF
 libneo_utl_la_SOURCES += ulocks.c rcfs.c
-include_HEADERS += ulocks.h rcfs.h
+library_include_HEADERS += ulocks.h rcfs.h
 endif
 
 if USE_PTHREAD
-libneo_utl_la_SOURCES += skiplist.c dict.c
-include_HEADERS += skiplist.h dict.h
+libneo_utl_la_SOURCES += plocks.c skiplist.c dict.c
+library_include_HEADERS += plocks.h skiplist.h dict.h
 endif
 
 if USE_BUILTIN_SNPRINTF
 libneo_utl_la_SOURCES += snprintf.c
-include_HEADERS += snprintf.h
+library_include_HEADERS += snprintf.h
 endif
 
 if USE_BUILTIN_REGEXEC
 libneo_utl_la_SOURCES += regex/regex.c
-include_HEADERS += regex/regex.h
+library_include_HEADERS += regex/regex.h
 endif
 
 if USE_BUILTIN_MISSING_FUNC
 libneo_utl_la_SOURCES += missing.c
-include_HEADERS += missing.h
+library_include_HEADERS += missing.h
 endif
 
 if !ON_MINGW32
 libneo_utl_la_SOURCES += filter.c neo_net.c neo_server.c
-include_HEADERS += filter.h neo_net.h neo_server.h
+library_include_HEADERS += filter.h neo_net.h neo_server.h
 endif
-
 

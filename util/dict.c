@@ -19,7 +19,8 @@
 #include "neo_err.h"
 #include "dict.h"
 #include "skiplist.h"
-#include "ulocks.h"
+
+#include "plocks.h"
 
 
 typedef struct dictValue {
