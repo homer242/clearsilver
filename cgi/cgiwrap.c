@@ -180,7 +180,7 @@ NEOERR *cgiwrap_writef (const char *fmt, ...)
   ret = cgiwrap_writevf (fmt, ap);
   va_end (ap);
   if (ret && ret != STATUS_OK)
-    nerr_ignore (ret);
+    nerr_ignore (&ret);
   return STATUS_OK;
 }
 
