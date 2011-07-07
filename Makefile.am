@@ -1,5 +1,29 @@
 SUBDIRS = util cgi cs
 
+if BUILD_APACHE_MODULE
+SUBDIRS += mod_ecs
+endif
+
+if BUILD_PYTHON_MODULE
+SUBDIRS += python
+endif
+
+if BUILD_PERL_MODULE
+SUBDIRS += perl
+endif
+
+if BUILD_RUBY_MODULE
+SUBDIRS += ruby
+endif
+
+if BUILD_JAVA_MODULE
+SUBDIRS += java-jni
+endif
+
+if BUILD_CSHARP_MODULE
+SUBDIRS += csharp
+endif
+
 ACLOCAL_AMFLAGS = -I m4 --install
 
 pkgconfigdir = $(libdir)/pkgconfig
