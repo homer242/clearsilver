@@ -273,77 +273,8 @@ AC_ARG_WITH(python, [  --with-python=path   Set location of Python Interpreter],
 
 if test "x$enable_python" = "xyes"; then
   AC_MSG_RESULT(Enabling python module)
-  AC_MSG_CHECKING(for python includes)
-  python_inc=no
-  python_lib=no
-  python_search_path="/neo/opt /usr/local /usr /c"
-  python_versions="2.4 2.3 2.2 2.1 2.0 1.5 24 23 22 21 20 15"
-  if test $cs_cv_python_path != "no" -a -x $cs_cv_python_path; then
-    python_bin=$cs_cv_python_path
-    vers=`$python_bin -c "import sys; print sys.version[[:3]]"`
-    py_inst_dir=`$python_bin -c "import sys; print sys.exec_prefix"`
-    python_inc=$py_inst_dir/include/python$vers
-    python_lib="-L$py_inst_dir/lib/python$vers/config -lpython$vers"
-    python_site=$py_inst_dir/lib/python$vers/site-packages
-  else
-    for vers in $python_versions; do
-      for path in $python_search_path; do
-        if test -x $path/bin/python$vers; then
-	  python_bin=$path/bin/python$vers
-	  major_vers=`echo $vers | cut -b 1`
-	  if test $major_vers -ge 2; then
-	      python_base=`$python_bin -c "import sys, os; print os.path.dirname([[x for x in sys.path if x.find('site-packages') != -1]][[0]])"`
-	  else
-	      python_base=`$python_bin -c "import site, os; print os.path.dirname(site.sitedirs[[0]])"`
-	  fi
-	  if test -d $python_base; then
-	      python_lib="-L$python_base/config -lpython$vers"
-	      python_site=$python_base/site-packages
-	  fi
-	fi
-	if test -f $path/include/python$vers/Python.h; then
-	  python_inc=$path/include/python$vers
-        fi
-	if test "x$python_lib" = "xno"; then
-	    if test -d $path/lib/python$vers; then
-	      python_lib="-L$path/lib/python$vers/config -lpython$vers"
-	      python_site=$path/lib/python$vers/site-packages
-	    fi
-	    if test -d $path/lib64/python$vers; then
-	      python_lib="-L$path/lib64/python$vers/config -lpython$vers"
-	      python_site=$path/lib64/python$vers/site-packages
-	    fi
-	fi
-	dnl This is currently special cased mostly for Windows
-	dnl installs, but we only use python_lib for windows anyways
-	if test -f $path/python$vers/include/Python.h; then
-	  python_inc=$path/python$vers/include
-	  python_lib="-L$path/python$vers/libs -lpython$vers"
-	  python_site=$path/python$vers/Lib/site-packages
-	  break 2
-	fi
-	if test "x$python_inc" != "xno" -a "x$python_lib" != "xno"; then
-	  break 2
-	fi
-      done
-    done
-  fi
-  if test "x$python_inc" = "xno"; then
-    AC_MSG_ERROR(not found)
-    PYTHON=
-    PYTHON_INC=
-    PYTHON_LIB=
-    PYTHON_SITE=
-  else
-    AC_MSG_RESULT(found $python_inc)
-    PYTHON=$python_bin
-    PYTHON_INC="-I$python_inc"
-    PYTHON_LIB=$python_lib
-    if test "x$PYTHON_SITE" = "x"; then
-	PYTHON_SITE=$python_site
-    fi
-    BUILD_WRAPPERS="$BUILD_WRAPPERS python"
-  fi
+  AM_PATH_PYTHON(2.2)
+  AM_CHECK_PYTHON_HEADERS(,[AC_MSG_ERROR(could not find Python headers)])
 fi
 
 dnl perl options
@@ -524,6 +455,6 @@ AM_CONDITIONAL(BUILD_CSHARP_MODULE, [test "x$enable_csharp" = "xyes"])
 
 # the generated files
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_FILES([clearsilver.pc Makefile cs/Makefile cgi/Makefile util/Makefile])
+AC_CONFIG_FILES([clearsilver.pc Makefile cs/Makefile cgi/Makefile util/Makefile python/Makefile])
 
 AC_OUTPUT
