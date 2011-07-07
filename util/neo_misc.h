@@ -16,11 +16,6 @@
 #include <time.h>
 #include <limits.h>
 
-/* In case they didn't start from ClearSilver.h. */
-#ifndef __CS_CONFIG_H_
-#include "cs_config.h"
-#endif
-
 /* Fix Up for systems that don't define these standard things */
 #ifndef __BEGIN_DECLS
 #ifdef __cplusplus

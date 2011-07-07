@@ -159,7 +159,6 @@ cd ..
 
 %files 
 %{__prefix}/include/ClearSilver/ClearSilver.h
-%{__prefix}/include/ClearSilver/cs_config.h
 %{__prefix}/include/ClearSilver/cgi/cgi.h
 %{__prefix}/include/ClearSilver/cgi/cgiwrap.h
 %{__prefix}/include/ClearSilver/cgi/date.h

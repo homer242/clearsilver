@@ -1,5 +1,4 @@
 ClearSilver.h
-cs_config.h
 cgi/cgi.h
 cgi/cgiwrap.h
 cgi/date.h

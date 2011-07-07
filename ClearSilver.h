@@ -12,8 +12,6 @@
 #ifndef __CLEARSILVER_H_
 #define __CLEARSILVER_H_ 1
 
-#include "cs_config.h"
-
 /* If you need these backward compatible definitions, define CS_COMPAT */
 /* These changed after v0.9.1 */
 #define CS_COMPAT 0
@@ -48,10 +46,6 @@
 #include "util/ulist.h"
 #include "util/wildmat.h"
 #include "util/filter.h"
-
-#if (CS_ENABLE_WDB)
-#include "util/wdb.h"
-#endif
 
 /* The ClearSilver Template language */
 #include "cs/cs.h"
