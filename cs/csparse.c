@@ -30,7 +30,7 @@
 #include <limits.h>
 #include <stdarg.h>
 
-#if (CS_ENABLE_GETTEXT)
+#if (ENABLE_GETTEXT)
 #include <libintl.h>
 #endif
 
