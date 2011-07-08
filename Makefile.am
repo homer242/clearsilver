@@ -25,9 +25,22 @@ SUBDIRS += csharp
 endif
 
 ACLOCAL_AMFLAGS = -I m4 --install
+AUTOMAKE_OPTIONS = foreign
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = clearsilver.pc
+
+EXTRA_DIST = m4/ac_jni_include_dirs.m4 \
+	m4/python.m4 \
+	m4/apache.m4 \
+	m4/apache_test.m4 \
+	CS_LICENSE \
+	INSTALL \
+	LICENSE \
+	README \
+	README.python \
+	python/README.txt \
+	python/examples/
 
 dist_man_MANS = man/man3/cBroadcast.3 \
 	man/man3/cCreate.3 \
