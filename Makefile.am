@@ -34,6 +34,7 @@ EXTRA_DIST = m4/ac_jni_include_dirs.m4 \
 	m4/python.m4 \
 	m4/apache.m4 \
 	m4/apache_test.m4 \
+	contrib/cs-mode.el \
 	CS_LICENSE \
 	INSTALL \
 	LICENSE \
